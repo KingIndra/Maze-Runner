@@ -194,7 +194,7 @@ private:
 public:
     Sensor sensor = *(this->sensor_pointer);
     Engine engine = *(this->engine_pointer);
-    String path;
+    String path = "", prevPath = "X";
 
     Robot(int sensorPins[], int motorPins[]);
     void update();
@@ -213,37 +213,42 @@ Robot :: Robot(int sensorPins[], int motorPins[]) {
     this->engine = *(this->engine_pointer);
 }
 void Robot :: update() {
+    String currPath = "";
     if(this->sensor.end()) {
         this->engine.stop();
-        this->path += "F";
+        currPath = "F";
     }
     else if(this->sensor.front_T()) {
         this->engine.moveLeft();
-        this->path += "S";
+        currPath = "S";
     }
     else if(this->sensor.u_turn()) {
         this->engine.moveBackword();
-        this->path += "B";
+        currPath = "B";
     }
     else if(this->sensor.cross_T()) {
         this->engine.moveLeft();
-        this->path += "L";
+        currPath = "L";
     }
     else if(this->sensor.left_turn()) {
         this->engine.moveLeft();
-        this->path += "L";
+        currPath = "L";
     }
     else if(this->sensor.right_turn()) {
         this->engine.moveRight();
-        this->path += "R";
+        currPath = "R";
     }
     else if(this->sensor.left_T()) {
         this->engine.moveLeft();
-        this->path += "L";
+        currPath = "L";
     }
     else if(this->sensor.right_T()) {
         this->engine.moveForward();
-        this->path += "S";
+        currPath = "S";
+    }
+    if(currPath != this->prevPath) {
+        this->path += currPath;
+        this->prevPath = currPath;
     }
 }
 String Robot :: optimizedPath() {
@@ -260,13 +265,10 @@ Robot :: ~Robot() {
     delete this->engine_pointer;
 }
 
-
 // SETUP
-
 int sensorPins[2] = {14, 19};
 int motorPins[2] = {3, 4}; 
 Robot robot(sensorPins, motorPins);
-
 
 void setup() {
     Serial.begin(9600);
