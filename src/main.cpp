@@ -198,7 +198,7 @@ public:
 
     Robot(int sensorPins[], int motorPins[]);
     void update();
-    String optimizedPath();
+    String shortestPath();
     ~Robot();
 };
 
@@ -251,14 +251,15 @@ void Robot :: update() {
         this->prevPath = currPath;
     }
 }
-String Robot :: optimizedPath() {
-    this->path.replace("LBL", "S");
-    this->path.replace("LBS", "R");
-    this->path.replace("RBL", "B");
-    this->path.replace("SBS", "B");
-    this->path.replace("SBL", "R");
-    this->path.replace("LBR", "B");
-    return this->path;
+String Robot :: shortestPath() {
+    String newPath = this->path;
+    newPath.replace("LBL", "S");
+    newPath.replace("LBS", "R");
+    newPath.replace("RBL", "B");
+    newPath.replace("SBS", "B");
+    newPath.replace("SBL", "R");
+    newPath.replace("LBR", "B");
+    return newPath;
 }
 Robot :: ~Robot() {
     delete this->sensor_pointer;
