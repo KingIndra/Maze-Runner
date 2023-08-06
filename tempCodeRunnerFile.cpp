@@ -1,1 +1,2 @@
- int b
+
+    // cout << s << endl;
